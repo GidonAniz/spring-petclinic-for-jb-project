@@ -1,0 +1,14 @@
+app:
+  image: "your-docker-image:latest"
+
+service:
+  type: "NodePort"
+
+mysql:
+  image: "mysql:5.7"
+  rootPassword: "your-root-password"
+  allowEmptyPassword: true
+  user: "petclinic"
+  password: "petclinic"
+  database: "petclinic"
+
