@@ -6,7 +6,7 @@ pipeline {
         APP_NAME = 'your-app-name'
     }
 
-
+    stages {
         stage('Build and Push Docker Image') {
             steps {
                 script {
