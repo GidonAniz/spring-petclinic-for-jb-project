@@ -6,19 +6,32 @@ pipeline {
         APP_NAME = 'your-app-name'
     }
 
-    stages {
-        stage('Build and Push Docker Image') {
+           stage('Build Docker Image') {
             steps {
                 script {
-                    // Step 2: Build and push Docker image
-                    docker.build("${DOCKER_HUB_REPO}/${APP_NAME}:${env.BUILD_NUMBER}")
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image("${DOCKER_HUB_REPO}/${APP_NAME}:${env.BUILD_NUMBER}").push()
-                        docker.image("${DOCKER_HUB_REPO}/${APP_NAME}:${env.BUILD_NUMBER}").push('latest')
+                    withCredentials([usernamePassword(credentialsId: 'c92d3aa8-67ab-4cf2-b3c6-a5e67285ed2d', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                        echo \${DOCKER_PASSWORD} | docker login -u \${DOCKER_USERNAME} --password-stdin
+                        docker build -t gidonan/cicd:${BUILD_NUMBER} -f Dockerfile .
+                        """
                     }
                 }
             }
         }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'c92d3aa8-67ab-4cf2-b3c6-a5e67285ed2d', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                        echo \${DOCKER_PASSWORD} | docker login -u \${DOCKER_USERNAME} --password-stdin
+                        docker push gidonan/cicd:${BUILD_NUMBER}
+                        """
+                    }
+                }
+            }
+        }
+
 
         stage('Deploy to Kubernetes') {
             steps {
