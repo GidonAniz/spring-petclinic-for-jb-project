@@ -5,7 +5,7 @@ pipeline {
         DOCKER_HUB_REPO = 'gidonan/k8s'
         APP_NAME = 'myapp'
     }
-
+         stages {
            stage('Build Docker Image') {
             steps {
                 script {
@@ -41,4 +41,5 @@ pipeline {
                 }
             }
         }
+      }
     }
