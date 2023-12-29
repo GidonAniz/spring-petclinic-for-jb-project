@@ -1,5 +1,5 @@
-FROM maven:3.8.4
-
+# Use an official Maven image for the Maven build stage
+FROM maven:3.8.4 AS maven_build
 
 
 # Install Helm dependencies on Alpine-based image
