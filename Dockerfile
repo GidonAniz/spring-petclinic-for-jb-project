@@ -20,7 +20,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the JAR file from the builder stage to the container
-COPY --from=builder /app/target/your-application.jar .
+COPY --from=builder /app/target/app.jar .
 
 # Specify the default command to run on container startup
 CMD ["java", "-jar", "app.jar"]
