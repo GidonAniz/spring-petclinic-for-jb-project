@@ -1,4 +1,5 @@
-FROM openjdk:8-jdk-alpine
+FROM maven:3.8.4
+
 
 
 # Install Helm dependencies on Alpine-based image
