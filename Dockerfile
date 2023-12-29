@@ -1,4 +1,5 @@
-FROM adoptopenjdk/openjdk8:alpine-slim AS maven_build
+FROM openjdk:8-jdk-alpine
+
 
 # Install Helm dependencies on Alpine-based image
 RUN apk update && \
