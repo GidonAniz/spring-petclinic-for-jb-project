@@ -15,12 +15,12 @@ pipeline {
                     // Install kubectl
                     sh 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'
                     sh 'chmod +x ./kubectl'
-                    sh 'sudo mv ./kubectl /usr/local/bin/kubectl'
+                    sh 'mv ./kubectl /usr/local/bin/kubectl'
 
                     // Install Helm
                     sh 'curl -LO https://get.helm.sh/helm-v3.7.0-linux-amd64.tar.gz'
                     sh 'tar -zxvf helm-v3.7.0-linux-amd64.tar.gz'
-                    sh 'sudo mv linux-amd64/helm /usr/local/bin/helm'
+                    sh 'mv linux-amd64/helm /usr/local/bin/helm'
                 }
             }
         }
