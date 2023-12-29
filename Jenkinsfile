@@ -5,7 +5,7 @@ pipeline {
     environment {
         DOCKER_HUB_REPO = 'gidonan/k8s'
         APP_NAME = 'myapp'
-        HELM_CHART_DIR = './helm-chart'
+        HELM_CHART_DIR = './my-app-chart'
     }
 
     stages {
