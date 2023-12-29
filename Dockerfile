@@ -11,9 +11,6 @@ COPY mvnw.cmd .
 # Copy the Project Object Model (POM) file
 COPY pom.xml .
 
-# Copy the Maven wrapper configuration
-COPY .mvn .mvn
-
 # Copy the source code
 COPY src src
 
