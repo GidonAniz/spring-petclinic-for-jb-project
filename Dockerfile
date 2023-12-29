@@ -1,4 +1,4 @@
-# Step 2: Build the artifact
+# Step 1: Build the artifact
 FROM maven:3.8.3-openjdk-8 AS builder
 
 WORKDIR /code
@@ -6,13 +6,13 @@ WORKDIR /code
 COPY . /code
 
 # Build the artifact
-RUN ./mvnw package
+RUN mvn clean package
 
-# Step 3: Create the final image
+# Step 2: Create the final image
 FROM openjdk:8-jre-alpine
 
-WORKDIR /code
+WORKDIR /app
 
-COPY --from=builder /code/target/*.jar /code
+COPY --from=builder /code/target/*.jar /app/app.jar
 
-CMD ["java", "-jar", "code/*.jar"]
+CMD ["java", "-jar", "app.jar"]
