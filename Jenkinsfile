@@ -28,13 +28,5 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    // Helm installation and deployment
-                    sh 'helm upgrade --install --wait --set app.image.name=${DOCKER_HUB_REPO}/${APP_NAME}:${env.BUILD_NUMBER} ${APP_NAME} ./helm-chart'
-                }
-            }
-        }
     }
 }
