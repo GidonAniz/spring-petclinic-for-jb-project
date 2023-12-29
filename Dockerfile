@@ -23,4 +23,4 @@ WORKDIR /app
 COPY --from=builder /app/target/your-application.jar .
 
 # Specify the default command to run on container startup
-CMD ["java", "-jar", "your-application.jar"]
+CMD ["java", "-jar", "app.jar"]
