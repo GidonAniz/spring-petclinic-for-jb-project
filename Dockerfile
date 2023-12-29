@@ -11,11 +11,14 @@ COPY mvnw.cmd .
 # Copy the Project Object Model (POM) file
 COPY pom.xml .
 
+# Copy the Maven wrapper configuration
+COPY .mvn .mvn
+
 # Copy the source code
 COPY src src
 
 # Build the artifact
-RUN /mvnw package
+RUN ./mvnw package
 
 # Create the final image
 FROM openjdk:8
