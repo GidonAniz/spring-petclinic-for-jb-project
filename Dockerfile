@@ -15,7 +15,7 @@ COPY pom.xml .
 COPY src src
 
 # Build the artifact
-RUN ./mvnw package
+RUN /mvnw package
 
 # Create the final image
 FROM openjdk:8
