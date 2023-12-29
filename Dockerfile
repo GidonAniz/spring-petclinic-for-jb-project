@@ -1,5 +1,10 @@
 FROM maven:3.8.4 AS maven_build
 
+# Install Helm dependencies
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get install -y openssl
+
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
@@ -28,7 +33,10 @@ WORKDIR /code
 COPY --from=maven_build /code/target/*.jar /code/
 
 # Install Helm in the final image
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get install -y openssl && \
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # Define the default command to run the application
 CMD ["java", "-jar", "/code/*.jar"]
