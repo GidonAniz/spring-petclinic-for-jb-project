@@ -1,12 +1,8 @@
-# Use an official OpenJDK runtime as a base image
-FROM openjdk:8
+# Use an official Maven image for the Maven build stage
+FROM maven:3.8.4 AS maven_build
 
 # Set the working directory in the container
 WORKDIR /code
-
-# Copy the Maven wrapper files (mvnw and mvnw.cmd)
-COPY mvnw .
-COPY mvnw.cmd .
 
 # Copy the Project Object Model (POM) file
 COPY pom.xml .
@@ -18,16 +14,16 @@ COPY .mvn .mvn
 COPY src src
 
 # Build the artifact
-RUN ./mvnw package
+RUN mvn package
 
-# Create the final image
+# Use an official OpenJDK runtime as a base image for the final stage
 FROM openjdk:8
 
 # Set the working directory in the container
 WORKDIR /code
 
-# Copy the JAR file from the previous stage
-COPY --from=0 /code/target/*.jar /code/
+# Copy the JAR file from the Maven build stage
+COPY --from=maven_build /code/target/*.jar /code/
 
 # Define the default command to run the application
 CMD ["java", "-jar", "/code/*.jar"]
