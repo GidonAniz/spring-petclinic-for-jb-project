@@ -1,9 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.4'
-        }
-    }
+    
+      agent any
 
     environment {
         DOCKER_HUB_REPO = 'gidonan/k8s'
