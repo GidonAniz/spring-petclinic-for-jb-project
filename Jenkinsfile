@@ -1,18 +1,27 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'maven:3.8.4'
+        }
+    }
 
     environment {
         DOCKER_HUB_REPO = 'gidonan/k8s'
         APP_NAME = 'myapp'
-        HELM_CHART_DIR = './helm-chart'  // Define HELM_CHART_DIR here
+        HELM_CHART_DIR = './helm-chart'
     }
 
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Build the Docker image
                     withCredentials([usernamePassword(credentialsId: '3b1907ec-9652-465c-9403-a8778041867d', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'export MAVEN_OPTS="-X" && echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin && docker build -t ${DOCKER_HUB_REPO}:${BUILD_NUMBER} -f Dockerfile .'
+                        sh """
+                            export MAVEN_OPTS="-X"
+                            echo \${DOCKER_PASSWORD} | docker login -u \${DOCKER_USERNAME} --password-stdin
+                            docker build -t \${DOCKER_HUB_REPO}:${BUILD_NUMBER} -f Dockerfile .
+                        """
                     }
                 }
             }
@@ -21,8 +30,12 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
+                    // Push the Docker image to Docker Hub
                     withCredentials([usernamePassword(credentialsId: '3b1907ec-9652-465c-9403-a8778041867d', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "echo \${DOCKER_PASSWORD} | docker login -u \${DOCKER_USERNAME} --password-stdin && docker push \${DOCKER_HUB_REPO}:${BUILD_NUMBER}"
+                        sh """
+                            echo \${DOCKER_PASSWORD} | docker login -u \${DOCKER_USERNAME} --password-stdin
+                            docker push \${DOCKER_HUB_REPO}:${BUILD_NUMBER}
+                        """
                     }
                 }
             }
