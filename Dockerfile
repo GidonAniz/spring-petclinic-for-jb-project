@@ -1,26 +1,30 @@
-# Use an official Maven image as the base image
-FROM maven:3.8.4-openjdk-11 AS builder
+# Use an official OpenJDK runtime as a base image
+FROM openjdk:8
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /code
 
-# Copy the pom.xml file to the container
+# Copy the Maven wrapper files (mvnw and mvnw.cmd)
+COPY mvnw .
+COPY mvnw.cmd .
+
+# Copy the Project Object Model (POM) file
 COPY pom.xml .
 
-# Copy the rest of the application code to the container
-COPY src/ src/
+# Copy the source code
+COPY src src
 
-# Build the application
-RUN mvn clean install
+# Build the artifact
+RUN ./mvnw package
 
-# Use an official OpenJDK image as the base image for the final image
-FROM openjdk:11-jre-slim
+# Create the final image
+FROM openjdk:8
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /code
 
-# Copy the JAR file from the builder stage to the container
-COPY --from=builder /app/target/app.jar .
+# Copy the JAR file from the previous stage
+COPY --from=0 /code/target/*.jar /code/
 
-# Specify the default command to run on container startup
-CMD ["java", "-jar", "app.jar"]
+# Define the default command to run the application
+CMD ["java", "-jar", "/code/*.jar"]
