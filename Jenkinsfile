@@ -28,5 +28,17 @@ pipeline {
             }
         }
 
+        stage('Create Deployment Manifests') {
+            steps {
+                script {
+                    // Create application deployment manifest
+                    sh "helm template ${APP_NAME} ${HELM_CHART_DIR} --set app.image.name=${DOCKER_HUB_REPO}/${APP_NAME}:${BUILD_NUMBER} --output-dir ./manifests"
+
+                    // Create MySQL deployment manifest
+                    sh 'helm template mysql stable/mysql --set image.tag=5.7,mysqlRootPassword=petclinic,mysqlUser=petclinic,mysqlPassword=petclinic,mysqlDatabase=petclinic --output-dir ./manifests'
+                }
+            }
+        }
+
     }
 }
