@@ -1,6 +1,5 @@
 pipeline {
-    
-      agent any
+    agent any
 
     environment {
         DOCKER_HUB_REPO = 'gidonan/k8s'
@@ -24,6 +23,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -56,6 +56,9 @@ pipeline {
         stage('Create Deployment Manifests') {
             steps {
                 script {
+                    // Add Helm repository
+                    sh 'helm repo add stable https://charts.helm.sh/stable --force-update'
+
                     // Create application deployment manifest
                     sh "helm template ${APP_NAME} ${HELM_CHART_DIR} --set app.image.name=${DOCKER_HUB_REPO}/${APP_NAME}:${BUILD_NUMBER} --output-dir ./manifests"
 
