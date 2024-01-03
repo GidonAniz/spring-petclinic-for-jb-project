@@ -1,5 +1,5 @@
 app:
-  image: "your-docker-image:latest"
+  image: "https://hub.docker.com/repository/docker/gidonan/k8s/general:49"
 
 service:
   type: "NodePort"
