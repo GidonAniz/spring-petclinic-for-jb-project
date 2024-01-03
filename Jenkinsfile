@@ -24,23 +24,6 @@ pipeline {
             }
         }
 
-        stage('Install Minikube') {
-            steps {
-                script {
-                    sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
-                    sh 'install minikube-linux-amd64 /usr/local/bin/minikube'
-                }
-            }
-        }
-
-        stage('Start Minikube') {
-            steps {
-                script {
-                    sh 'minikube start --memory=4096 --cpus=2'
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -77,24 +60,10 @@ pipeline {
                     sh 'helm repo add stable https://charts.helm.sh/stable --force-update'
 
                     // Create application deployment manifest
-                    sh "helm template ${APP_NAME} ${HELM_CHART_DIR} --set app.image.name=${DOCKER_HUB_REPO}/${APP_NAME}:${BUILD_NUMBER} --set app.replicaCount=1 --output-dir ./manifests"
-                }
-            }
-        }
+                    sh "helm template ${APP_NAME} ${HELM_CHART_DIR} --set app.image.name=${DOCKER_HUB_REPO}/${APP_NAME}:${BUILD_NUMBER} --output-dir ./manifests"
 
-        stage('Deploy to Minikube') {
-            steps {
-                script {
-                    // Apply manifests to Minikube cluster
-                    sh 'kubectl apply -f ./manifests'
-                }
-            }
-        }
-
-        stage('Stop Minikube') {
-            steps {
-                script {
-                    sh 'minikube stop'
+                    // Create MySQL deployment manifest
+                    sh 'helm template mysql stable/mysql --set image.tag=5.7,mysqlRootPassword=petclinic,mysqlUser=petclinic,mysqlPassword=petclinic,mysqlDatabase=petclinic --output-dir ./manifests'
                 }
             }
         }
