@@ -24,6 +24,23 @@ pipeline {
             }
         }
 
+        stage('Install Minikube') {
+            steps {
+                script {
+                    sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                    sh 'sudo install minikube-linux-amd64 /usr/local/bin/minikube'
+                }
+            }
+        }
+
+        stage('Start Minikube') {
+            steps {
+                script {
+                    sh 'minikube start --memory=4096 --cpus=2'
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -53,7 +70,7 @@ pipeline {
             }
         }
 
-      stage('Create Deployment Manifests') {
+        stage('Create Deployment Manifests') {
             steps {
                 script {
                     // Add Helm repository
@@ -65,11 +82,19 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Minikube') {
             steps {
                 script {
-                    // Apply manifests to Kubernetes cluster
+                    // Apply manifests to Minikube cluster
                     sh 'kubectl apply -f ./manifests'
+                }
+            }
+        }
+
+        stage('Stop Minikube') {
+            steps {
+                script {
+                    sh 'minikube stop'
                 }
             }
         }
