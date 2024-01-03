@@ -6,7 +6,7 @@ service:
 
 mysql:
   image: "mysql:5.7"
-  rootPassword: "your-root-password"
+  rootPassword: "petclinic"
   allowEmptyPassword: true
   user: "petclinic"
   password: "petclinic"
