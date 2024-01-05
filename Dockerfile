@@ -26,4 +26,4 @@ WORKDIR /code
 COPY --from=maven_build /code/target/classes /code/classes
 
 # Define the default command to run the application
-CMD ["java", "-cp", "/code/classes", "com.your.gidon.petclinic"]
+CMD ["java", "-jar", "/code/*.jar"]
