@@ -22,8 +22,8 @@ FROM openjdk:8-jre-alpine
 # Set the working directory in the container
 WORKDIR /code
 
-# Copy the compiled classes and resources from the Maven build stage
-COPY --from=maven_build /code/target/classes /code/classes
+# Copy the compiled JAR file from the Maven build stage
+COPY --from=maven_build /code/target/petclinic.jar /code/
 
 # Define the default command to run the application
-CMD ["java", "-jar", "/code/*.jar"]
+CMD ["java", "-jar", "/code/petclinic.jar"]
