@@ -23,7 +23,7 @@ FROM openjdk:8-jre-alpine
 WORKDIR /code
 
 # Copy the compiled JAR file from the Maven build stage
-COPY --from=maven_build /code/target/petclinic.jar /code/
+COPY --from=maven_build /code/target/*.jar /code/
 
 # Define the default command to run the application
 CMD ["java", "-jar", "/code/petclinic.jar"]
