@@ -16,25 +16,14 @@ COPY src src
 # Build the artifact
 RUN mvn package
 
-# Use an official Docker image with Helm and Kubernetes tools for the final stage
-FROM alpine:latest
-
-# Install Helm and kubectl
-RUN apk --no-cache add bash curl
-RUN curl -LO https://get.helm.sh/helm-v3.7.0-linux-amd64.tar.gz \
-    && tar -zxvf helm-v3.7.0-linux-amd64.tar.gz \
-    && mv linux-amd64/helm /usr/local/bin/helm \
-    && rm -rf linux-amd64 helm-v3.7.0-linux-amd64.tar.gz
-
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.2/bin/linux/amd64/kubectl \
-    && chmod +x kubectl \
-    && mv kubectl /usr/local/bin/kubectl
+# Use an official OpenJDK image for the final stage
+FROM openjdk:8-jre-alpine
 
 # Set the working directory in the container
 WORKDIR /code
 
-# Copy the JAR file from the Maven build stage
-COPY --from=maven_build /code/target/*.jar /code/
+# Copy the compiled classes and resources from the Maven build stage
+COPY --from=maven_build /code/target/classes /code/classes
 
 # Define the default command to run the application
-CMD ["java", "-jar", "/code/*.jar"]
+CMD ["java", "-cp", "/code/classes", "com.your.gidon.petclinic"]
