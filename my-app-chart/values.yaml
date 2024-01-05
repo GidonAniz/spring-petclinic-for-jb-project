@@ -1,5 +1,5 @@
 app:
-  image: "gidonan/k8s/general:49"
+  image: "gidonan/k8s:49"
 
 service:
   type: "NodePort"
