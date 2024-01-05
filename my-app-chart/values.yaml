@@ -5,7 +5,7 @@ service:
   type: "NodePort"
 
 mysql:
-  image: "mysql:5.7"
+  image: "mysql:latest"
   rootPassword: "petclinic"
   allowEmptyPassword: true
   user: "petclinic"
