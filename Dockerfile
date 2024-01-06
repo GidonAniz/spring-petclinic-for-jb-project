@@ -22,6 +22,9 @@ FROM openjdk:17-oracle
 # Set the working directory in the container
 WORKDIR /code
 
+# Copy the compiled JAR file from the Maven build stage and rename it
+COPY --from=maven_build /code/target/*.jar /code/spring-petclinic.jar
+
 # Define the default command to run the application
-CMD ["java", "-jar", "/code/spring-petclinic-3.2.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/code/spring-petclinic.jar"]
 
