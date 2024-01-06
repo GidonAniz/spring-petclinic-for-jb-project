@@ -17,7 +17,8 @@ COPY src src
 RUN mvn package
 
 # Use an official OpenJDK image for the final stage
-FROM adoptopenjdk:17-jre-hotspot
+FROM openjdk:17-jre-alpine
+
 
 # Set the working directory in the container
 WORKDIR /code
