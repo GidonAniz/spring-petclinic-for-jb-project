@@ -17,8 +17,7 @@ COPY src src
 RUN mvn package
 
 # Use an official OpenJDK image for the final stage
-FROM openjdk:17-jre-alpine
-
+FROM openjdk:17-oracle
 
 # Set the working directory in the container
 WORKDIR /code
