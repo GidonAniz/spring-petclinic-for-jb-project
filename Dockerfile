@@ -17,13 +17,10 @@ COPY src src
 RUN mvn package
 
 # Use an official OpenJDK image for the final stage
-FROM openjdk:8-jre-alpine
+FROM adoptopenjdk:17-jre-hotspot
 
 # Set the working directory in the container
 WORKDIR /code
-
-# Copy the compiled JAR file from the Maven build stage
-COPY --from=maven_build /code/target/*.jar /code/
 
 # Define the default command to run the application
 CMD ["java", "-jar", "/code/spring-petclinic-3.2.0-SNAPSHOT.jar"]
