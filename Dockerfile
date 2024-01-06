@@ -26,4 +26,5 @@ WORKDIR /code
 COPY --from=maven_build /code/target/*.jar /code/
 
 # Define the default command to run the application
-CMD ["java", "-jar", "/code/petclinic.jar"]
+CMD ["java", "-jar", "/code/spring-petclinic-3.2.0-SNAPSHOT.jar"]
+
